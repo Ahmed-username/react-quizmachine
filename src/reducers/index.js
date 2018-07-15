@@ -1,6 +1,10 @@
 import { combineReducers } from 'redux';
-import placeholder from './placeholder';
+import newQ from './newQ'
+import score from './score'
+
+
 
 export default combineReducers({
-  placeholder
+  newQ,
+  score
 });

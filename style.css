@@ -13,3 +13,36 @@
   background-color: #550527;
   border: 2px solid white;
 }
+
+body{
+  background-color: #cccccc
+}
+
+.hidden{
+  color: #cccccc;
+}
+
+.none{
+  display: none;
+}
+
+.green{
+  color: green;
+}
+
+.red{
+  color:red;
+}
+
+.feedback__image__container{
+  text-align: center;
+  
+}
+
+.feedback__image{
+  height: 40%;
+  width: 50;
+  
+}
+
+
