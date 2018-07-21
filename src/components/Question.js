@@ -1,14 +1,18 @@
 import React from "react"
 let shuffle = require("shuffle-array");
+let isShuffled=false;
+let arr=[];
 
 class Question extends React.Component{
 
 
     constructor(){
         super()
-        this.selectHandler=this.selectHandler.bind(this);
-        this.state={correct:false,wrong:false, tempAnswer:"", difficulty:"easy"}
         this.difficultyHandler=this.difficultyHandler.bind(this);
+        this.state={correct:false,wrong:false, tempAnswer:"", difficulty:"easy", isSubmitted:false}
+        this.nextHandler=this.nextHandler.bind(this);
+        this.answerHandler=this.answerHandler.bind(this)
+        
     }
 
     componentDidMount(){
@@ -18,16 +22,15 @@ class Question extends React.Component{
 
     difficultyHandler(event){
       this.setState({difficulty:event.target.value})
-      this.props.newQuestion(this.state.difficulty);
+      this.props.newQuestion(event.target.value);
 
     }
 
     
 
-    selectHandler(event){
-        
-       event.preventDefault();
-
+    answerHandler(event){
+        if(!this.state.isSubmitted){
+        event.preventDefault();
         if(event.target.value === this.props.question.results.correct_answer){
             this.setState({correct:true, wrong:false})
             if(this.props.question.results.difficulty==="easy")
@@ -43,20 +46,34 @@ class Question extends React.Component{
             this.setState({correct:false, wrong:true, tempAnswer: this.props.question.results.correct_answer})
             this.props.correctHandler(0)
         }
+        this.setState({isSubmitted:true})
+    }
 
-        this.props.newQuestion(this.state.difficulty);
-        event.target.checked=false;
+        
+
+       // this.props.newQuestion(this.state.difficulty);
+      
+        
+    }
+
+    nextHandler(){
+
+        
 
     }
 
+
     render(){
+        
         const {results} =this.props.question
         if(!results) return null;
-        let arr=[...results.incorrect_answers, results.correct_answer]
         
-        shuffle(arr)
-       
-      
+        if(!isShuffled){
+         arr=[...results.incorrect_answers, results.correct_answer];
+         shuffle(arr)
+        isShuffled=true
+        }
+        
         return ( 
             
             <div>
@@ -67,17 +84,23 @@ class Question extends React.Component{
                     <option value="hard"> Hard </option>
                 </select>
 
+
+            
         
-                <form onChange={this.selectHandler}>
+                <form >
                 
                
-                <p> Question: {results.question} 
+                <p> Question: {decodeURIComponent(results.question)} 
                 <span className="hidden"> {results.correct_answer} </span> </p>
 
                 {arr.map((answer,i)=>{
                     return(
                     <div key={i}> 
-                    <input type="radio" id={i} name="answer" value={answer}/>
+                    {/* <input type="radio" id={i} name="answer" value={answer}/>
+                    <label htmlFor={i}> {answer} </label> */}
+                    {/* <button onClick={this.answerHandler} value={answer} id={i}> {answer} </button> */}
+
+                     <input onClick={this.answerHandler} type="button" id={answer}  value={answer}/>
                     <label htmlFor={i}> {answer} </label>
                     </div>
                     )
@@ -90,6 +113,8 @@ class Question extends React.Component{
                 <p className={this.state.correct ? "green" : "none"}
                 > Correct Answer! </p>
                 <h2> Score: {this.props.score} </h2>
+
+                <button onClick={this.nextHandler}> Next Question </button>
 
                 <div className="feedback__image__container">
                
