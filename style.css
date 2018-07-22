@@ -35,6 +35,16 @@ body{
   color:red;
 }
 
+.wrong{
+  animation: red-animation 5s infinite;
+  height:100vh;
+}
+
+.right{
+  animation: green-animation 5s infinite;
+  height:100vh;
+}
+
 .feedback__image__container{
   text-align: center;
   
@@ -44,6 +54,26 @@ body{
   height: 40%;
   width: 50;
   
+}
+
+
+
+@keyframes red-animation {
+  0% {background-color: #ff0000}
+  25% {background-color: #ff4d4d}
+  50% {background-color: #ff8080}
+  75% {background-color: #ffb3b3}
+  100% {background-color: #ffe6e6}
+ 
+}
+
+@keyframes green-animation {
+  0% {background-color: #00cc00}
+  25% {background-color: #00ff00}
+  50% {background-color: #33ff33}
+  75% {background-color: #80ff80}
+  100% {background-color: #b3ffb3}
+ 
 }
 
 

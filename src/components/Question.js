@@ -1,7 +1,7 @@
 import React from "react"
 let shuffle = require("shuffle-array");
 let isShuffled=false;
-let arr=[];
+// let arr=[];
 
 class Question extends React.Component{
 
@@ -31,7 +31,7 @@ class Question extends React.Component{
     answerHandler(event){
         if(!this.state.isSubmitted){
         event.preventDefault();
-        if(event.target.value === this.props.question.results.correct_answer){
+        if(event.target.id === this.props.question.results.correct_answer){
             this.setState({correct:true, wrong:false})
             if(this.props.question.results.difficulty==="easy")
             this.props.correctHandler(1)
@@ -42,23 +42,21 @@ class Question extends React.Component{
         }
         
         else{
-           
+           console.log(event.target.id)
             this.setState({correct:false, wrong:true, tempAnswer: this.props.question.results.correct_answer})
             this.props.correctHandler(0)
         }
         this.setState({isSubmitted:true})
     }
 
-        
-
-       // this.props.newQuestion(this.state.difficulty);
-      
-        
     }
 
     nextHandler(){
 
-        
+        isShuffled=false;
+        this.setState({correct:false,wrong:false})
+        this.setState({isSubmitted:false})
+        this.props.newQuestion(this.state.difficulty);
 
     }
 
@@ -68,25 +66,25 @@ class Question extends React.Component{
         const {results} =this.props.question
         if(!results) return null;
         
-        if(!isShuffled){
-         arr=[...results.incorrect_answers, results.correct_answer];
+        // if(!isShuffled){
+        //  arr=[...results.incorrect_answers, results.correct_answer];
+        //  shuffle(arr)
+        // isShuffled=true
+        // }
+
+        let arr=[...results.incorrect_answers, results.correct_answer];
          shuffle(arr)
-        isShuffled=true
-        }
         
         return ( 
             
-            <div>
+            <div className={this.state.wrong ? "wrong" : ""} >
+            <div className={this.state.correct ? "right" : ""}>
                 <p> difficulty </p>
                 <select onChange={this.difficultyHandler} >
                     <option value="easy"> Easy </option>
                     <option value="medium"> Medium </option>
                     <option value="hard"> Hard </option>
-                </select>
-
-
-            
-        
+                </select>        
                 <form >
                 
                
@@ -96,27 +94,21 @@ class Question extends React.Component{
                 {arr.map((answer,i)=>{
                     return(
                     <div key={i}> 
-                    {/* <input type="radio" id={i} name="answer" value={answer}/>
-                    <label htmlFor={i}> {answer} </label> */}
-                    {/* <button onClick={this.answerHandler} value={answer} id={i}> {answer} </button> */}
-
-                     <input onClick={this.answerHandler} type="button" id={answer}  value={answer}/>
-                    <label htmlFor={i}> {answer} </label>
+                     <input onClick={this.answerHandler} type="button" id={answer}  value={answer}/> 
                     </div>
                     )
-
                 })}
                 
                 </form>
-                <p className={this.state.wrong ? "red" : "none"}
+                {/* <p className={this.state.wrong ? "red" : "none"}
                 > Wrong answer! correct Answer was: {this.state.tempAnswer} </p>
                 <p className={this.state.correct ? "green" : "none"}
-                > Correct Answer! </p>
+                > Correct Answer! </p> */}
                 <h2> Score: {this.props.score} </h2>
 
                 <button onClick={this.nextHandler}> Next Question </button>
 
-                <div className="feedback__image__container">
+                {/* <div className="feedback__image__container">
                
                 <img className={this.state.wrong ? "feedback__image" : "none"}
                 src="../../images/wrong.gif" />
@@ -124,10 +116,10 @@ class Question extends React.Component{
                 <img className={this.state.correct ? "feedback__image" : "none"} 
                 src="../../images/right.gif"  />
 
-                </div>
+                </div> */}
                 
                 
-           
+           </div>
             </div>
         );
     }
